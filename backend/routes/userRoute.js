@@ -51,7 +51,7 @@ userRouter.post("/login", (req, res) => {
           process.env.JTW_TOKEN
         );
 
-        return res.status(400).send({ token });
+        return res.status(200).send({ token });
       } else {
         return res.status(400).send({ error: "Wrong data" });
       }
