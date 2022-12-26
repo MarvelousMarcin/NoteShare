@@ -100,7 +100,7 @@ const Login = () => {
           </h2>
         </form>
         <section>
-          <img className="w-[25rem]" src={fot1} />
+          <img className="w-[22rem]" src={fot1} />
         </section>
       </main>
     </section>

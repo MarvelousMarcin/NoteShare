@@ -48,7 +48,7 @@ userRouter.post("/login", (req, res) => {
       if (bcrypt.compareSync(password, row.password)) {
         const token = jwt.sign(
           { name: row.name, email: row.email },
-          process.env.JTW_TOKEN
+          process.env.JWT_TOKEN
         );
 
         return res.status(200).send({ token });

@@ -40,7 +40,7 @@ const Register = () => {
         </section>
         <form
           onSubmit={onSubmit}
-          className="flex flex-col h-[43rem] justify-evenly w-[23rem]"
+          className="flex flex-col h-[35rem] justify-evenly w-[23rem]"
         >
           <article>
             <h1 className="text-5xl text-center">Join to us</h1>
