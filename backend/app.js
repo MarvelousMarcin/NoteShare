@@ -12,8 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 4000;
 
 const userRoute = require("./routes/userRoute");
+const notesRoute = require("./routes/notesRoute");
 
 app.use(userRoute);
+app.use(notesRoute);
 
 app.get("/", async (req, res) => {});
 
