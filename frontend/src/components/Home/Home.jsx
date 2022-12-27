@@ -13,6 +13,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const [notes, setNotes] = useState([]);
   const token = useSelector((state) => state.auth.token);
+  const [clickedNote, setClickedNote] = useState({});
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const logoutHandler = () => {
     dispatch(setToken(""));
@@ -27,47 +29,79 @@ const Home = () => {
       body: JSON.stringify({ token }),
     });
     const data = await response.json();
+    console.log(data);
+
     setNotes(data);
   };
   useEffect(() => {
     loadNotes();
   }, []);
 
+  const onNoteClick = (e) => {
+    setPreviewOpen((prev) => !prev);
+    const idValue = e.target.getAttribute("id");
+
+    const found = notes.find((item) => {
+      if (item.note_id == idValue) {
+        return item;
+      }
+    });
+    setClickedNote(found);
+  };
+
   return (
-    <section className="w-screen h-screen bg-[#F1EDE9]">
-      <nav className="h-[11vh] flex justify-between items-center px-10">
-        <h2 className="text-2xl">
-          Note<span className="font-bold">Share</span>
-        </h2>
-        <ul className="flex justify-evenly w-[30vw]">
-          <li className="cursor-pointer font-bold">Your notes</li>
-          <li className="cursor-pointer">
-            <Link to="/public">Public notes</Link>
-          </li>
-          <li onClick={logoutHandler} className="cursor-pointer">
-            Log out
-          </li>
-        </ul>
-      </nav>
-      <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <section>
-          <div className="flex flex-row justify-between w-[30vw]  mb-10">
-            <h2 className="font-bold text-2xl">
-              <Link to="/home">Your notes</Link>
-            </h2>
-            <div>
-              <Link to="/newnote">Add</Link>
+    <>
+      <section className="w-screen h-screen bg-[#F1EDE9]">
+        <nav className="h-[11vh] flex justify-between items-center px-10">
+          <h2 className="text-2xl">
+            Note<span className="font-bold">Share</span>
+          </h2>
+          <ul className="flex justify-evenly w-[30vw]">
+            <li className="cursor-pointer font-bold">Your notes</li>
+            <li className="cursor-pointer">
+              <Link to="/public">Public notes</Link>
+            </li>
+            <li onClick={logoutHandler} className="cursor-pointer">
+              Log out
+            </li>
+          </ul>
+        </nav>
+        <main className="flex flex-row items-center justify-evenly h-[89vh]">
+          <section>
+            <div className="flex flex-row justify-between w-[30vw]  mb-10">
+              <h2 className="font-bold text-2xl">
+                <Link to="/home">Your notes</Link>
+              </h2>
+              <div>
+                <Link to="/newnote">Add</Link>
+              </div>
             </div>
-          </div>
-          <article className="h-[35vh] overflow-y-scroll overflow-x-hidden">
-            {notes.map((item) => (
-              <Note title={item.title} />
-            ))}
-          </article>
-        </section>
-        <img src={fot3} className="w-[30rem]" />
-      </main>
-    </section>
+            <article className="h-[35vh] overflow-y-scroll overflow-x-hidden">
+              {notes.map((item) => (
+                <Note
+                  onClick={onNoteClick}
+                  id={item.note_id}
+                  title={item.title}
+                />
+              ))}
+            </article>
+          </section>
+          <img src={fot3} className="w-[30rem]" />
+        </main>
+        {previewOpen && (
+          <section
+            onClick={() => setPreviewOpen((prev) => !prev)}
+            className="w-[100vw] h-[100vh] opacity-50 bg-black fixed  left-0 top-0"
+          ></section>
+        )}
+        {previewOpen && (
+          <section className=" p-20 fixed w-[50rem] h-[40rem] bg-gray-900 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <h1 className="text-white text-3xl">{clickedNote.title}</h1>
+            <p className="text-white text-2xl mt-10">{clickedNote.content}</p>
+          </section>
+        )}
+      </section>
+    </>
   );
 };
 
