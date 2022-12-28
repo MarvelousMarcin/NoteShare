@@ -3,7 +3,7 @@ import "./App.css";
 import Login from "./components/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register/Register";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Public from "./components/Public/Public";
 import Home from "./components/Home/Home";
 import NewNote from "./components/NewNote/NewNote";
