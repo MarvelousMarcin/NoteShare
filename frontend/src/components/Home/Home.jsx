@@ -10,6 +10,7 @@ import { useState } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import plus from "../../assets/plus.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -89,6 +90,16 @@ const Home = () => {
     setShareError(data.error);
   };
 
+  const deleteNote = async () => {
+    await fetch("http://localhost:4000/note", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, note_id: clickedNote.note_id }),
+    });
+    loadNotes();
+    setShareOpen((prev) => !prev);
+  };
+
   return (
     <>
       <section className="w-screen h-screen bg-[#F1EDE9]">
@@ -118,7 +129,9 @@ const Home = () => {
               </h2>
 
               <div>
-                <Link to="/newnote">Add</Link>
+                <Link to="/newnote">
+                  <img className="w-[2rem]" src={plus} />
+                </Link>
               </div>
             </div>
             <article className="whitespace-nowrap overflow-auto scrollbar-hide h-[35vh] overflow-x-hidden">
@@ -195,7 +208,7 @@ const Home = () => {
 
               <button
                 className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold"
-                onClick={shareNote}
+                onClick={deleteNote}
               >
                 Delete
               </button>

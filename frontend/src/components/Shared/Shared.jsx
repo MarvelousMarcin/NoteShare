@@ -74,7 +74,8 @@ const Shared = () => {
         <img src={fot} className="w-[30rem]" />
 
         <section className="w-[35rem]">
-          <article className="h-[35vh] overflow-y-scroll overflow-x-hidden">
+          <h1 className="font-bold text-2xl">Notes shared to me</h1>
+          <article className="h-[35vh] overflow-y-scroll overflow-x-hidden whitespace-nowrap overflow-auto scrollbar-hide">
             {sharedNotes.map((item) => (
               <Note
                 id={item.note_id}

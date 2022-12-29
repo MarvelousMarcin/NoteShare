@@ -61,20 +61,4 @@ userRouter.post("/login", (req, res) => {
   });
 });
 
-userRouter.get("/user", (req, res) => {
-  db.all("SELECT * FROM USERS", (error, rows) => {
-    return res.json(rows);
-  });
-});
-
-userRouter.delete("/user", (req, res) => {
-  db.exec("DELETE FROM USERS WHERE email='tom2@gmail.com'", (error, rows) => {
-    return res.json(rows);
-  });
-});
-
-userRouter.post("/addnote", auth, (req, res) => {
-  res.send(req.user);
-});
-
 module.exports = userRouter;

@@ -1,5 +1,6 @@
 import lock from "../../assets/lock.png";
-import share from "../../assets/share.png";
+import share from "../../assets/settings.png";
+import { motion } from "framer-motion";
 
 const Note = ({
   title,
@@ -20,14 +21,14 @@ const Note = ({
       <div id={id} className="flex flex-row items-center">
         {!isPublic && (
           <>
-            <img
+            <motion.img
               alt="picture"
               onClick={onShareClick}
               id={id}
-              className=""
               src={share}
+              className="w-[2rem]"
+              whileHover={{ rotate: "80deg" }}
             />
-            <img alt="picture" id={id} className="" src={lock} />
           </>
         )}
         <p>{user}</p>

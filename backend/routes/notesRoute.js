@@ -125,4 +125,22 @@ notesRoute.post("/cipher", auth, (req, res) => {
   const key = req.body.key;
 });
 
+notesRoute.delete("/note", auth, (req, res) => {
+  const note_id = req?.body?.note_id;
+  const user = req.user.email;
+
+  db.all(`SELECT * FROM NOTES WHERE note_id='${note_id}'`, (error, rows) => {
+    if (rows.length > 0) {
+      if (rows[0].user !== user) {
+        return res.status(400).send({ error: "No permission to this note" });
+      } else {
+        db.run(`DELETE FROM NOTES WHERE note_id='${note_id}'`);
+        return res.status(200).send({});
+      }
+    } else {
+      return res.status(400).send({ error: "Note doesn't exist" });
+    }
+  });
+});
+
 module.exports = notesRoute;
