@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Public from "./components/Public/Public";
 import Home from "./components/Home/Home";
 import NewNote from "./components/NewNote/NewNote";
-
+import Shared from "./components/Shared/Shared";
 function App() {
   const isLogged = useSelector((state) => state.auth.isLoggedIn);
 
@@ -27,6 +27,10 @@ function App() {
         <Route
           path="/newnote"
           element={isLogged ? <NewNote /> : <div>Auth needed</div>}
+        />
+        <Route
+          path="/shared"
+          element={isLogged ? <Shared /> : <div>Auth needed</div>}
         />
       </Routes>
     </div>

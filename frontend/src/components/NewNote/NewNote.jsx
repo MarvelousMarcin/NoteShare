@@ -39,6 +39,9 @@ const NewNote = () => {
             <Link to="/home">Your notes</Link>
           </li>
           <li className="cursor-pointer">
+            <Link to="/shared">Shared to me</Link>
+          </li>
+          <li className="cursor-pointer">
             <Link to="/public">Public notes</Link>
           </li>
           <li onClick={logoutHandler} className="cursor-pointer">

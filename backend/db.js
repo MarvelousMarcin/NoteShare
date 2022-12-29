@@ -12,7 +12,7 @@ const db = new sqlite3.Database("test.db");
 // db.serialize(() => {
 //   try {
 //     db.run(
-//       "CREATE TABLE NOTES (note_id INTEGER PRIMARY KEY AUTOINCREMENT ,title TEXT, content TEXT, user TEXT, public TEXT, locked TEXT, key TEXT)"
+//       "CREATE TABLE SHARES (share_id INTEGER PRIMARY KEY AUTOINCREMENT ,fro TEXT, t TEXT, note_id INTEGER)"
 //     );
 //   } catch (error) {
 //     console.log(error);

@@ -57,8 +57,10 @@ const Public = () => {
         </h2>
         <ul className="flex justify-evenly w-[30vw]">
           <li className="cursor-pointer">
-            {" "}
             <Link to="/home">Your notes</Link>
+          </li>
+          <li className="cursor-pointer">
+            <Link to="/shared">Shared to me</Link>
           </li>
           <li className="cursor-pointer font-bold">
             <Link to="/public">Public notes</Link>
@@ -69,7 +71,7 @@ const Public = () => {
         </ul>
       </nav>
       <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <img src={fot3} className="w-[30rem]" />
+        <img src={fot3} className="w-[20rem]" />
 
         <section>
           <div className="flex flex-row justify-between w-[30vw] mb-10">

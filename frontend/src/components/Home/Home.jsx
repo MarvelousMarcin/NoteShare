@@ -19,6 +19,8 @@ const Home = () => {
   const [clickedNote, setClickedNote] = useState({});
   const [previewOpen, setPreviewOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareError, setShareError] = useState("");
+  const [userShare, setUserShare] = useState("");
 
   const logoutHandler = () => {
     dispatch(setToken(""));
@@ -73,6 +75,20 @@ const Home = () => {
     loadNotes();
   };
 
+  const shareNote = async () => {
+    const response = await fetch("http://localhost:4000/share", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        note_id: clickedNote.note_id,
+        user_to: userShare,
+      }),
+    });
+    const data = await response.json();
+    setShareError(data.error);
+  };
+
   return (
     <>
       <section className="w-screen h-screen bg-[#F1EDE9]">
@@ -83,8 +99,12 @@ const Home = () => {
           <ul className="flex justify-evenly w-[30vw]">
             <li className="cursor-pointer font-bold">Your notes</li>
             <li className="cursor-pointer">
+              <Link to="/shared">Shared to me</Link>
+            </li>
+            <li className="cursor-pointer">
               <Link to="/public">Public notes</Link>
             </li>
+
             <li onClick={logoutHandler} className="cursor-pointer">
               Log out
             </li>
@@ -96,11 +116,12 @@ const Home = () => {
               <h2 className="font-bold text-2xl">
                 <Link to="/home">Your notes</Link>
               </h2>
+
               <div>
                 <Link to="/newnote">Add</Link>
               </div>
             </div>
-            <article className="h-[35vh] overflow-y-scroll overflow-x-hidden">
+            <article className="whitespace-nowrap overflow-auto scrollbar-hide h-[35vh] overflow-x-hidden">
               {notes.map((item) => (
                 <Note
                   onShareClick={onShareClick}
@@ -131,14 +152,14 @@ const Home = () => {
           ></section>
         )}
         {previewOpen && (
-          <section className=" p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <section className="rounded-md p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <h1 className="text-3xl">{clickedNote.title}</h1>
             <p className=" text-2xl mt-10">{clickedNote.content}</p>
           </section>
         )}
         {shareOpen && (
-          <section className=" p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <h1 className=" text-3xl mb-20">Share</h1>
+          <section className="rounded-md p-20 fixed w-[50rem] h-[70%] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <h1 className="text-2xl  mb-10">Make public</h1>
             <FormGroup>
               {clickedNote.public === "Y" && (
                 <FormControlLabel
@@ -153,6 +174,32 @@ const Home = () => {
                 />
               )}
             </FormGroup>
+            <section className="flex flex-col h-[50%] justify-around">
+              <h1 className="text-2xl mt-10">Share to a friend</h1>
+              <input
+                onChange={(e) => setUserShare(e.target.value)}
+                type="text"
+                placeholder="Friend email"
+                className="bg-transparent w-[20rem] placeholder-[#e1d9d1] outline-none border-2 rounded-md border-[#d7d0c8] px-4 py-3"
+              />
+              <button
+                className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold"
+                onClick={shareNote}
+              >
+                Share
+              </button>
+              <p>{shareError}</p>
+            </section>
+            <section className="flex flex-col h-[20%] justify-around">
+              <h1 className="text-2xl ">Delete</h1>
+
+              <button
+                className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold"
+                onClick={shareNote}
+              >
+                Delete
+              </button>
+            </section>
           </section>
         )}
       </section>
