@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 
 const NewNote = () => {
   const navigate = useNavigate();
@@ -19,6 +20,10 @@ const NewNote = () => {
   };
 
   const addNoteHandler = async () => {
+    if (!title || !content) {
+      return;
+    }
+
     await fetch("http://localhost:4000/note", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -50,9 +55,23 @@ const NewNote = () => {
         </ul>
       </nav>
       <main className="flex flex-col items-center justify-evenly h-[89vh]">
-        <input onChange={(e) => setTitle(e.target.value)} placeholder="title" />
-        <textarea onChange={(e) => setContent(e.target.value)}></textarea>
-        <button onClick={addNoteHandler}>Add</button>
+        <input
+          className="bg-transparent text-3xl outline-none text-center"
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+          focus
+        />
+        <textarea
+          className="w-[30rem] h-[30rem] rounded-xl resize-none outline-none p-5"
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
+        <motion.button
+          className="bg-[#181818] text-white w-[12rem] h-[2.5rem] font-bold"
+          onClick={addNoteHandler}
+          whileHover={{ width: "13rem" }}
+        >
+          Add
+        </motion.button>
       </main>
     </section>
   );

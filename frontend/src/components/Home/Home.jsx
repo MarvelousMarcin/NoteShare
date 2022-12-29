@@ -11,6 +11,8 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import plus from "../../assets/plus.png";
+import ReactMarkdown from "https://esm.sh/react-markdown@7";
+import remarkGfm from "remark-gfm";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -167,7 +169,10 @@ const Home = () => {
         {previewOpen && (
           <section className="rounded-md p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <h1 className="text-3xl">{clickedNote.title}</h1>
-            <p className=" text-2xl mt-10">{clickedNote.content}</p>
+            <ReactMarkdown
+              children={clickedNote.content}
+              remarkPlugins={[remarkGfm]}
+            />
           </section>
         )}
         {shareOpen && (

@@ -71,7 +71,7 @@ const Shared = () => {
         </ul>
       </nav>
       <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <img src={fot} className="w-[30rem]" />
+        <img alt="pic" src={fot} className="w-[30rem]" />
 
         <section className="w-[35rem]">
           <h1 className="font-bold text-2xl">Notes shared to me</h1>
