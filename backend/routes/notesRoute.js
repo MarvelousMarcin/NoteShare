@@ -1,9 +1,17 @@
 const express = require("express");
 const notesRoute = express.Router();
 const db = require("../db");
-const bcrypt = require("bcrypt");
+var CryptoJS = require("crypto-js");
 
 const auth = require("./verifyToken");
+
+const nullKeysInOutput = (rows) => {
+  const newRows = rows.map((item) => {
+    return { ...item, key: null };
+  });
+
+  return newRows;
+};
 
 notesRoute.post("/note", auth, (req, res) => {
   const { title, content } = req.body;
@@ -21,7 +29,7 @@ notesRoute.post("/getnote", auth, (req, res) => {
   db.all(
     `SELECT * FROM NOTES WHERE user='${req.user.email}'`,
     (error, rows) => {
-      return res.json(rows);
+      return res.json(nullKeysInOutput(rows));
     }
   );
 });
@@ -46,7 +54,7 @@ notesRoute.post("/makepublic", auth, (req, res) => {
 
 notesRoute.post("/notepublic", auth, (req, res) => {
   db.all(`SELECT * FROM NOTES WHERE public='Y'`, (error, rows) => {
-    return res.json(rows);
+    return res.json(nullKeysInOutput(rows));
   });
 });
 
@@ -111,18 +119,13 @@ notesRoute.post("/getshared", auth, (req, res) => {
       sharedToMe += "1=0";
       db.all(`SELECT * FROM NOTES WHERE ${sharedToMe}`, (error, rows) => {
         if (rows) {
-          return res.status(200).send(rows);
+          return res.status(200).send(nullKeysInOutput(rows));
         }
       });
     } else {
       return res.status(400).send({ error: "No shared notes with you" });
     }
   });
-});
-
-notesRoute.post("/cipher", auth, (req, res) => {
-  const id = req.body.id;
-  const key = req.body.key;
 });
 
 notesRoute.delete("/note", auth, (req, res) => {
@@ -136,6 +139,57 @@ notesRoute.delete("/note", auth, (req, res) => {
       } else {
         db.run(`DELETE FROM NOTES WHERE note_id='${note_id}'`);
         return res.status(200).send({});
+      }
+    } else {
+      return res.status(400).send({ error: "Note doesn't exist" });
+    }
+  });
+});
+
+notesRoute.post("/secure", auth, (req, res) => {
+  const note_id = req?.body?.note_id;
+  const user = req.user.email;
+  const password = req?.body?.key;
+
+  db.all(`SELECT * FROM NOTES WHERE note_id='${note_id}'`, (error, rows) => {
+    if (rows.length > 0) {
+      if (rows[0].user !== user) {
+        return res.status(400).send({ error: "No permission to this note" });
+      } else {
+        if (rows[0].locked === "N") {
+          var ciphertext = CryptoJS.AES.encrypt(
+            rows[0].content,
+            password
+          ).toString();
+
+          db.run(
+            "UPDATE NOTES SET locked = 'Y', content = $content, key = $key WHERE note_id = $note_id",
+            {
+              $note_id: note_id,
+              $content: ciphertext,
+              $key: password,
+            }
+          );
+          return res.status(200).send({ msg: "Encrypted" });
+        } else {
+          if (rows[0].key === password) {
+            const decrypt = CryptoJS.AES.decrypt(rows[0].content, password);
+            const originalText = decrypt.toString(CryptoJS.enc.Utf8);
+
+            db.run(
+              "UPDATE NOTES SET locked = 'N', content = $content, key = $key WHERE note_id = $note_id",
+              {
+                $note_id: note_id,
+                $content: originalText,
+                $key: null,
+              }
+            );
+
+            return res.status(200).send({ msg: "Decrypted" });
+          } else {
+            return res.status(400).send({ error: "Bad password" });
+          }
+        }
       }
     } else {
       return res.status(400).send({ error: "Note doesn't exist" });

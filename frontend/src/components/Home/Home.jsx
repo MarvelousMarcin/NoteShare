@@ -23,7 +23,9 @@ const Home = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareError, setShareError] = useState("");
+  const [cipherError, setCipherError] = useState("");
   const [userShare, setUserShare] = useState("");
+  const [password, setPassword] = useState("");
 
   const logoutHandler = () => {
     dispatch(setToken(""));
@@ -79,6 +81,10 @@ const Home = () => {
   };
 
   const shareNote = async () => {
+    if (clickedNote.locked === "Y") {
+      return setShareError("You cannot share encrypted note");
+    }
+
     const response = await fetch("http://localhost:4000/share", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,6 +106,26 @@ const Home = () => {
     });
     loadNotes();
     setShareOpen((prev) => !prev);
+  };
+
+  const cipherNote = async () => {
+    const response = await fetch("http://localhost:4000/secure", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        note_id: clickedNote.note_id,
+        key: password,
+      }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setCipherError(data.msg);
+      clickedNote.locked = clickedNote.locked === "Y" ? "N" : "Y";
+    } else {
+      setCipherError(data.error);
+    }
+    loadNotes();
   };
 
   return (
@@ -162,21 +188,28 @@ const Home = () => {
           <section
             onClick={() => {
               setShareOpen((prev) => !prev);
+              setShareError("");
+              setCipherError("");
             }}
             className="w-[100vw] h-[100vh] opacity-50 bg-black fixed  left-0 top-0"
           ></section>
         )}
         {previewOpen && (
-          <section className="rounded-md p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <section className="rounded-md  p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            {clickedNote.locked === "Y" && (
+              <h2 className="font-bold text-red-800">Encrypted</h2>
+            )}
             <h1 className="text-3xl">{clickedNote.title}</h1>
-            <ReactMarkdown
-              children={clickedNote.content}
-              remarkPlugins={[remarkGfm]}
-            />
+            <p className="break-words	">
+              <ReactMarkdown
+                children={clickedNote.content}
+                remarkPlugins={[remarkGfm]}
+              />
+            </p>
           </section>
         )}
         {shareOpen && (
-          <section className="rounded-md p-20 fixed w-[50rem] h-[70%] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <section className="rounded-md p-20 fixed w-[50rem] h-[80%] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <h1 className="text-2xl  mb-10">Make public</h1>
             <FormGroup>
               {clickedNote.public === "Y" && (
@@ -192,8 +225,8 @@ const Home = () => {
                 />
               )}
             </FormGroup>
-            <section className="flex flex-col h-[50%] justify-around">
-              <h1 className="text-2xl mt-10">Share to a friend</h1>
+            <section className="flex flex-col h-[40%] justify-around">
+              <h1 className="text-2xl ">Share to a friend</h1>
               <input
                 onChange={(e) => setUserShare(e.target.value)}
                 type="text"
@@ -208,6 +241,27 @@ const Home = () => {
               </button>
               <p>{shareError}</p>
             </section>
+
+            <section className="flex flex-col h-[20%] justify-around">
+              <h1 className="text-2xl ">
+                {clickedNote.locked === "N" ? "Encrypt" : "Decrypt"}
+              </h1>
+
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Secret key"
+                className="bg-transparent w-[20rem] placeholder-[#e1d9d1] outline-none border-2 rounded-md border-[#d7d0c8] px-4 py-3"
+              />
+              <button
+                onClick={cipherNote}
+                className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold"
+              >
+                {clickedNote.locked === "N" ? "Encrypt" : "Decrypt"}
+              </button>
+              {cipherError}
+            </section>
+
             <section className="flex flex-col h-[20%] justify-around">
               <h1 className="text-2xl ">Delete</h1>
 
