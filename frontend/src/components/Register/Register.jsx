@@ -13,6 +13,10 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    if (!password || !email || !name) {
+      return setError("Empty inputs");
+    }
+
     const response = await fetch("http://localhost:4000/user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

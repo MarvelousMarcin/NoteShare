@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ const Login = () => {
       navigate("/home");
     } else {
       const data = await response.json();
-      console.log(data);
+      setError(data.error);
     }
   };
 
@@ -81,10 +82,7 @@ const Login = () => {
             />
           </article>
           <article className="flex flex-row justify-between">
-            <article>
-              <input type="checkbox" /> Remember me
-            </article>
-            <h3>Forgot Password?</h3>
+            <h2 className="text-red-800 font-bold">{error}</h2>
           </article>
           <button
             onClick={onSubmit}
