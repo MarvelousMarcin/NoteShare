@@ -11,7 +11,6 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import plus from "../../assets/plus.png";
-import remarkGfm from "remark-gfm";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Markdown from "react-markdown";
 

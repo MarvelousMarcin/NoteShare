@@ -5,9 +5,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import fot from "../../assets/fot5.png";
-import ReactMarkdown from "https://esm.sh/react-markdown@7";
-import remarkGfm from "remark-gfm";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Markdown from "react-markdown";
 
 import Note from "../Note/Note";
 const Shared = () => {
@@ -103,10 +102,9 @@ const Shared = () => {
         <section className=" p-20 fixed w-[50rem] h-[40rem] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <h1 className="text-3xl">{clickedNote.title}</h1>
           <p className="break-words	">
-            <ReactMarkdown
-              children={clickedNote.content}
-              remarkPlugins={[remarkGfm]}
-            />
+            <div className="prose break-words w-[20rem]">
+              <Markdown children={clickedNote.content} />
+            </div>
           </p>
         </section>
       )}
