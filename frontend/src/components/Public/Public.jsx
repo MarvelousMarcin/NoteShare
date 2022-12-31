@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Note from "../Note/Note";
 import ReactMarkdown from "https://esm.sh/react-markdown@7";
 import remarkGfm from "remark-gfm";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Public = () => {
   const navigate = useNavigate();
@@ -31,7 +32,6 @@ const Public = () => {
       body: JSON.stringify({ token }),
     });
     const data = await response.json();
-
     setPublicNotes(data);
   };
 
@@ -73,8 +73,7 @@ const Public = () => {
         </ul>
       </nav>
       <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <img src={fot3} className="w-[20rem]" />
-
+        <LazyLoadImage src={fot3} className="w-[20rem]" />
         <section>
           <div className="flex flex-row justify-between w-[30vw] mb-10">
             <h2 className="font-bold text-2xl">Public notes</h2>

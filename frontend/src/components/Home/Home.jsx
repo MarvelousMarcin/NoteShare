@@ -11,8 +11,9 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import plus from "../../assets/plus.png";
-import ReactMarkdown from "https://esm.sh/react-markdown@7";
 import remarkGfm from "remark-gfm";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import Markdown from "react-markdown";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ const Home = () => {
 
               <div>
                 <Link to="/newnote">
-                  <img className="w-[2rem]" src={plus} />
+                  <LazyLoadImage className="w-[2rem]" src={plus} />
                 </Link>
               </div>
             </div>
@@ -173,7 +174,7 @@ const Home = () => {
               ))}
             </article>
           </section>
-          <img src={fot3} className="w-[30rem]" />
+          <LazyLoadImage src={fot3} className="w-[25rem]" />
         </main>
         {previewOpen && (
           <section
@@ -200,12 +201,9 @@ const Home = () => {
               <h2 className="font-bold text-red-800">Encrypted</h2>
             )}
             <h1 className="text-3xl">{clickedNote.title}</h1>
-            <p className="break-words	">
-              <ReactMarkdown
-                children={clickedNote.content}
-                remarkPlugins={[remarkGfm]}
-              />
-            </p>
+            <div className="prose break-words w-[20rem]">
+              <Markdown children={clickedNote.content} />
+            </div>
           </section>
         )}
         {shareOpen && (

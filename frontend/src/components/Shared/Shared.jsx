@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import fot from "../../assets/fot5.png";
 import ReactMarkdown from "https://esm.sh/react-markdown@7";
 import remarkGfm from "remark-gfm";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import Note from "../Note/Note";
 const Shared = () => {
@@ -73,7 +74,7 @@ const Shared = () => {
         </ul>
       </nav>
       <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <img alt="pic" src={fot} className="w-[30rem]" />
+        <LazyLoadImage alt="pic" src={fot} className="w-[15rem]" />
 
         <section className="w-[35rem]">
           <h1 className="font-bold text-2xl">Notes shared to me</h1>

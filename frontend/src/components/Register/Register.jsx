@@ -2,6 +2,7 @@ import fot1 from "../../assets/fot2.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -40,7 +41,7 @@ const Register = () => {
       </nav>
       <main className="flex flex-row w-screen h-[90vh] justify-evenly items-center">
         <section>
-          <img className="w-[30rem]" src={fot1} />
+          <LazyLoadImage className="w-[30rem]" src={fot1} />
         </section>
         <form
           onSubmit={onSubmit}
