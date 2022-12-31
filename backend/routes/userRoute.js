@@ -6,6 +6,7 @@ const saltRounds = 10;
 const auth = require("./verifyToken");
 var jwt = require("jsonwebtoken");
 var validator = require("email-validator");
+const Joi = require("joi");
 
 const checkPassword = (password) => {
   let entropy = 0;
@@ -29,7 +30,8 @@ userRouter.post("/user", (req, res) => {
   }
 
   // Email Validate
-  if (!validator.validate(email)) {
+  const schema = Joi.string().email();
+  if (schema.validate(email).error) {
     return res.status(400).send({ error: "Wrong email" });
   }
 
@@ -43,17 +45,18 @@ userRouter.post("/user", (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
   // Check if user exists
-  db.all(`SELECT * FROM USERS WHERE email='${email}'`, (error, rows) => {
+  db.all(`SELECT * FROM USERS WHERE email= ?`, [email], (error, rows) => {
     if (error) {
       return res.status(400).send({ error });
     }
 
     if (rows.length < 1) {
-      db.run("INSERT INTO USERS VALUES (?, ?, ?)", [
+      db.run("INSERT INTO USERS VALUES (?, ?, ?, ?, ?)", [
         email,
         hashedPassword,
         name,
         "N",
+        null,
       ]);
       return res.status(200).send({});
     } else {
@@ -67,7 +70,11 @@ userRouter.post("/user", (req, res) => {
 userRouter.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  db.get(`SELECT * FROM USERS WHERE email='${email}'`, (error, row) => {
+  if (!email || !password) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
+
+  db.get(`SELECT * FROM USERS WHERE email = ? `, [email], (error, row) => {
     if (row) {
       // If account is blocked
       if (row.blocked === "Y") {
@@ -87,7 +94,7 @@ userRouter.post("/login", (req, res) => {
           process.env.JWT_TOKEN
         );
 
-        db.run(`DELETE FROM LOGIN_TRY WHERE user='${email}'`);
+        db.run(`DELETE FROM LOGIN_TRY WHERE user= ? `, [email]);
         return res.status(200).send({ token });
       } else {
         db.run(`INSERT INTO LOGIN_TRY (user) VALUES (?)`, [email]);

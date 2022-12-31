@@ -2,6 +2,7 @@ const express = require("express");
 const notesRoute = express.Router();
 const db = require("../db");
 var CryptoJS = require("crypto-js");
+var xss = require("xss");
 
 const auth = require("./verifyToken");
 
@@ -14,9 +15,18 @@ const nullKeysInOutput = (rows) => {
 };
 
 notesRoute.post("/note", auth, (req, res) => {
-  const { title, content } = req.body;
+  let { title, content } = req.body;
+
+  if (!title || !content) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
 
   const userEmail = req.user.email;
+
+  // Protecting from xss
+
+  title = xss(title);
+  content = xss(content);
 
   db.run(
     `INSERT INTO NOTES (title, content, user, public, locked) VALUES (?, ?, ?, ?, ?)`,
@@ -27,7 +37,8 @@ notesRoute.post("/note", auth, (req, res) => {
 
 notesRoute.post("/getnote", auth, (req, res) => {
   db.all(
-    `SELECT * FROM NOTES WHERE user='${req.user.email}'`,
+    `SELECT * FROM NOTES WHERE user= ?`,
+    [req.user.email],
     (error, rows) => {
       return res.json(nullKeysInOutput(rows));
     }
@@ -35,7 +46,15 @@ notesRoute.post("/getnote", auth, (req, res) => {
 });
 
 notesRoute.post("/makepublic", auth, (req, res) => {
-  const key = req.body.key;
+  let key = req.body.key;
+
+  if (!key) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
+
+  // Protecting from xss
+
+  key = xss(key);
 
   db.all(`SELECT * FROM NOTES WHERE note_id='${key}'`, (error, row) => {
     if (row[0].public === "Y") {
@@ -62,6 +81,11 @@ notesRoute.post("/share", auth, async (req, res) => {
   const note_id = req.body.note_id;
   const user_to = req.body.user_to;
   const user_from = req.user.email;
+
+  if (!note_id || !user_to) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
+
   if (user_to === user_from) {
     return res.status(400).send({ error: "You cannot share note to yourself" });
   }
@@ -111,7 +135,7 @@ notesRoute.post("/share", auth, async (req, res) => {
 notesRoute.post("/getshared", auth, (req, res) => {
   let sharedToMe = "";
 
-  db.all(`SELECT * FROM SHARES WHERE t='${req.user.email}'`, (error, rows) => {
+  db.all(`SELECT * FROM SHARES WHERE t= ?`, [req.user.email], (error, rows) => {
     if (rows) {
       rows.forEach((row) => {
         sharedToMe += `note_id='${row.note_id}' OR `;
@@ -132,12 +156,16 @@ notesRoute.delete("/note", auth, (req, res) => {
   const note_id = req?.body?.note_id;
   const user = req.user.email;
 
-  db.all(`SELECT * FROM NOTES WHERE note_id='${note_id}'`, (error, rows) => {
+  if (!note_id) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
+
+  db.all(`SELECT * FROM NOTES WHERE note_id= ? `, [note_id], (error, rows) => {
     if (rows.length > 0) {
       if (rows[0].user !== user) {
         return res.status(400).send({ error: "No permission to this note" });
       } else {
-        db.run(`DELETE FROM NOTES WHERE note_id='${note_id}'`);
+        db.run(`DELETE FROM NOTES WHERE note_id= ? `, [note_id]);
         return res.status(200).send({});
       }
     } else {
@@ -151,7 +179,11 @@ notesRoute.post("/secure", auth, (req, res) => {
   const user = req.user.email;
   const password = req?.body?.key;
 
-  db.all(`SELECT * FROM NOTES WHERE note_id='${note_id}'`, (error, rows) => {
+  if (!note_id || !password) {
+    return res.status(400).send({ error: "Wrong input" });
+  }
+
+  db.all(`SELECT * FROM NOTES WHERE note_id= ? `, [note_id], (error, rows) => {
     if (rows.length > 0) {
       if (rows[0].user !== user) {
         return res.status(400).send({ error: "No permission to this note" });
