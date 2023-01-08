@@ -7,6 +7,7 @@ require("./db");
 
 app.disable("x-powered-by");
 app.use(cors());
+app.set("trust proxy", true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

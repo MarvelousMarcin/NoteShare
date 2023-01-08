@@ -41,7 +41,7 @@ const Register = () => {
       </nav>
       <main className="flex flex-row w-screen h-[90vh] justify-evenly items-center">
         <section>
-          <LazyLoadImage className="w-[30rem]" src={fot1} />
+          <LazyLoadImage className="w-[30rem] hidden md:block" src={fot1} />
         </section>
         <form
           onSubmit={onSubmit}

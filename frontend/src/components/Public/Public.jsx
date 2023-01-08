@@ -56,7 +56,7 @@ const Public = () => {
         <h2 className="text-2xl">
           Note<span className="font-bold">Share</span>
         </h2>
-        <ul className="flex justify-evenly w-[30vw]">
+        <ul className="flex justify-evenly w-[38vw]">
           <li className="cursor-pointer">
             <Link to="/home">Your notes</Link>
           </li>
@@ -66,13 +66,16 @@ const Public = () => {
           <li className="cursor-pointer font-bold">
             <Link to="/public">Public notes</Link>
           </li>
+          <li className="cursor-pointer">
+            <Link to="/settings">Settings</Link>
+          </li>
           <li onClick={logoutHandler} className="cursor-pointer">
             Log out
           </li>
         </ul>
       </nav>
       <main className="flex flex-row items-center justify-evenly h-[89vh]">
-        <LazyLoadImage src={fot3} className="w-[20rem]" />
+        <LazyLoadImage src={fot3} className="w-[20rem] hidden md:block" />
         <section>
           <div className="flex flex-row justify-between w-[30vw] mb-10">
             <h2 className="font-bold text-2xl">Public notes</h2>

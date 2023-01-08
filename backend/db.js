@@ -12,7 +12,7 @@ const db = new sqlite3.Database("test.db");
 // db.serialize(() => {
 //   try {
 //     db.run(
-//       "CREATE TABLE LOGIN_LOGS (login_log_id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT)"
+//       "CREATE TABLE LOGINS_STATS (login_log_id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, id TEXT)"
 //     );
 //   } catch (error) {
 //     console.log(error);

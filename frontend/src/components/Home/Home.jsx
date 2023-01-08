@@ -135,13 +135,16 @@ const Home = () => {
           <h2 className="text-2xl">
             Note<span className="font-bold">Share</span>
           </h2>
-          <ul className="flex justify-evenly w-[30vw]">
+          <ul className="flex justify-evenly w-[38vw]">
             <li className="cursor-pointer font-bold">Your notes</li>
             <li className="cursor-pointer">
               <Link to="/shared">Shared to me</Link>
             </li>
             <li className="cursor-pointer">
               <Link to="/public">Public notes</Link>
+            </li>
+            <li className="cursor-pointer">
+              <Link to="/settings">Settings</Link>
             </li>
 
             <li onClick={logoutHandler} className="cursor-pointer">
@@ -173,7 +176,7 @@ const Home = () => {
               ))}
             </article>
           </section>
-          <LazyLoadImage src={fot3} className="w-[25rem]" />
+          <LazyLoadImage src={fot3} className="w-[25rem] hidden md:block" />
         </main>
         {previewOpen && (
           <section

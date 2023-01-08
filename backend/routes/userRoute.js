@@ -5,9 +5,10 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const auth = require("./verifyToken");
 var jwt = require("jsonwebtoken");
-var validator = require("email-validator");
 const Joi = require("joi");
+const IP = require("ip");
 
+// Check password entorpy
 const checkPassword = (password) => {
   let entropy = 0;
   let size = password.length;
@@ -71,7 +72,7 @@ userRouter.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send({ error: "Wrong input" });
+    return res.status(400).send({ error: "Wrong data" });
   }
 
   db.get(`SELECT * FROM USERS WHERE email = ? `, [email], (error, row) => {
@@ -84,7 +85,7 @@ userRouter.post("/login", (req, res) => {
       // Check last login try time
       const time = new Date();
 
-      if (time - row["last_login_try"] < 3000) {
+      if (time - row["last_login_try"] < 2000) {
         return res.status(400).send({ error: "Login to fast" });
       }
 
@@ -94,7 +95,15 @@ userRouter.post("/login", (req, res) => {
           process.env.JWT_TOKEN
         );
 
+        const currTime = Date.now();
+
         db.run(`DELETE FROM LOGIN_TRY WHERE user= ? `, [email]);
+        db.run(`INSERT INTO LOGINS_STATS (user, ip, time) VALUES (?, ?, ?)`, [
+          email,
+          IP.address(),
+          currTime,
+        ]);
+
         return res.status(200).send({ token });
       } else {
         db.run(`INSERT INTO LOGIN_TRY (user) VALUES (?)`, [email]);
@@ -129,6 +138,22 @@ userRouter.post("/login", (req, res) => {
       return res.status(400).send({ error: "Wrong data" });
     }
   });
+});
+
+userRouter.post("/get_stats", auth, (req, res) => {
+  const user = req.user.email;
+
+  db.all(
+    `SELECT * FROM LOGINS_STATS WHERE user = ? `,
+    [user],
+    (error, rows) => {
+      if (rows.length > 0) {
+        return res.status(200).send(rows);
+      } else {
+        return res.status(400).send({ error: "No data to show" });
+      }
+    }
+  );
 });
 
 module.exports = userRouter;

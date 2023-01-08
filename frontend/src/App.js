@@ -8,6 +8,7 @@ import Public from "./components/Public/Public";
 import Home from "./components/Home/Home";
 import NewNote from "./components/NewNote/NewNote";
 import Shared from "./components/Shared/Shared";
+import Settings from "./components/Settings/Settings";
 function App() {
   const isLogged = useSelector((state) => state.auth.isLoggedIn);
 
@@ -31,6 +32,10 @@ function App() {
         <Route
           path="/shared"
           element={isLogged ? <Shared /> : <div>Auth needed</div>}
+        />
+        <Route
+          path="/settings"
+          element={isLogged ? <Settings /> : <div>Auth needed</div>}
         />
       </Routes>
     </div>

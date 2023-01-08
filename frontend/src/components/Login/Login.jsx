@@ -23,7 +23,6 @@ const Login = () => {
     console.log(response);
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       dispatch(setToken(data.token));
       dispatch(setIsLoggedIn(true));
       navigate("/home");
@@ -43,7 +42,7 @@ const Login = () => {
       <main className="flex flex-row w-screen h-[90vh] justify-evenly items-center">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col h-[35rem] justify-evenly"
+          className="flex flex-col h-[30rem] justify-evenly"
         >
           <article>
             <h1 className="text-5xl text-center">Welcome back</h1>
@@ -98,7 +97,7 @@ const Login = () => {
           </h2>
         </form>
         <section>
-          <img className="w-[22rem]" src={fot1} />
+          <img className="w-[22rem] hidden md:block" src={fot1} />
         </section>
       </main>
     </section>
