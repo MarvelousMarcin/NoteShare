@@ -28,6 +28,6 @@ app.use(userRoute);
 app.use(notesRoute);
 
 // Create an HTTP service.
-http.createServer(app).listen(80);
+http.createServer(app).listen(PORT);
 // Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(4001);

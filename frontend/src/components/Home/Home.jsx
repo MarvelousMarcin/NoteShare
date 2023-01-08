@@ -34,7 +34,7 @@ const Home = () => {
   };
 
   const loadNotes = async () => {
-    const response = await fetch("https://localhost/getnote", {
+    const response = await fetch("http://localhost:4000/getnote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
@@ -72,7 +72,7 @@ const Home = () => {
   };
 
   const makePublic = async () => {
-    await fetch("https://localhost/makepublic", {
+    await fetch("http://localhost:4000/makepublic", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, key: clickedNote.note_id }),
@@ -85,7 +85,7 @@ const Home = () => {
       return setShareError("You cannot share encrypted note");
     }
 
-    const response = await fetch("https://localhost/share", {
+    const response = await fetch("http://localhost:4000/share", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -99,7 +99,7 @@ const Home = () => {
   };
 
   const deleteNote = async () => {
-    await fetch("https://localhost/note", {
+    await fetch("http://localhost:4000/note", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, note_id: clickedNote.note_id }),
@@ -109,7 +109,7 @@ const Home = () => {
   };
 
   const cipherNote = async () => {
-    const response = await fetch("https://localhost/secure", {
+    const response = await fetch("http://localhost:4000/secure", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
