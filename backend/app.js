@@ -1,7 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
+const https = require("https");
+const fs = require("fs");
 require("dotenv").config();
 const app = express();
+
+const options = {
+  key: fs.readFileSync("./client-key.pem"),
+  cert: fs.readFileSync("./client-cert.pem"),
+};
 
 require("./db");
 
@@ -19,6 +27,7 @@ const notesRoute = require("./routes/notesRoute");
 app.use(userRoute);
 app.use(notesRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Create an HTTP service.
+http.createServer(app).listen(80);
+// Create an HTTPS service identical to the HTTP service.
+https.createServer(options, app).listen(443);
