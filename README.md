@@ -14,6 +14,8 @@
     <li><a href="#strona-główna">Strona Główna</a></li>
     <li><a href="#notatka-publiczna">Notatka Publiczna</a></li>
     <li><a href="#udostępnienie-notatki">Udostępnienie notatki</a></li>
+    <li><a href="#szyfrowanie-notatek">Szyfrowanie notatek</a></li>
+    <li><a href="#statystyki-logowań">Statystyki logowań</a></li>
 
   </ol>
 
@@ -33,6 +35,24 @@ Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki mo�
 
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
+### Instalacja
+
+1. Sklonuj repo
+   ```sh
+   git clone https://github.com/MarvelousMarcin/NoteShare
+   ```
+2. Dodaj plik z .env z JWT(przykładowy token, na którym są zrobione testowe dane)
+   ```sh
+   JWT_TOKEN='dashdioasjndioasiodhnasiodshnaindai0pdhnaisda'
+   ```
+3. Uruchom docker compose
+   ```sh
+    docker compose up
+   ```
+4. Stworzą się dwa image **noteshare-api** oraz **noteshare-client**
+
+5. Wejdź na linki https://localhost:3000
+
 ## **Tworzenie konta**
 
 Aby stworzyć nowe konto musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
@@ -45,19 +65,22 @@ Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia 
 
 - **Wyliczanie entropii**
 
-        const checkPassword = (password) => {
-        let entropy = 0;
-        let size = password.length;
+  ````js
+  const checkPassword = (password) => {
+  let entropy = 0;
+  let size = password.length;
 
-        for (let i = 0; i < 256; i++) {
-            let prob = (password.split(String.fromCharCode(i)).length - 1) / size;
-            if (prob > 0) {
-            entropy += prob * Math.log2(prob);
-            }
-        }
+  for (let i = 0; i < 256; i++) {
+   let prob = (password.split(String.fromCharCode(i)).length - 1) / size;
+   if (prob > 0) {
+     entropy += prob * Math.log2(prob);
+   }
+  }
 
-        return -entropy;
-        };
+  return -entropy;
+  };
+   ```
+  ````
 
 - **Email musi być unikalny oraz musi być "E-Mailem"** - jeżeli system napotka jakiś błąd formularz wyświetli odpowiedni komunikat.
 
@@ -124,3 +147,37 @@ W panelu notatki możemy również udostępnić notatkę wybranemu użytkownikow
 Zalogujmy się na konto **test** i zobaczmy
 
 <img src="./readmeAssets/shared.png" width=800 />
+
+Jeżeli spróbujemy udostępnić notatkę użytkownikowi który nie istnieje zostaniemy o tym poinformowani.
+
+<img src="./readmeAssets/shareErr.gif" width=800 />
+
+Nie możemy także udostępniać zaszyfrowanych notatek.
+
+<img src="./readmeAssets/shareErr2.gif" width=800 />
+
+**_Możemy jednak zaszyfrować udostępnioną już notatkę._**
+
+## **Szyfrowanie notatek**
+
+Oprócz oczywiście usuwania notatki mamy jeszcze jedną funkcję czyli zaszyfrowanie notatki. Jeżeli jest ona niezaszyfrowana podajemy tajne hasło i zobaczymy, że treść notatki została zmodyfikowana. Szyfrowanie jest wykonywanie przy pomocy algorytmu **AES**.
+
+<img src="./readmeAssets/cipher2.gif" width=800 />
+
+Notatke możemy też oczywiście odszyfrować podając poprawne hasło.
+
+<img src="./readmeAssets/cipher3.gif" width=800 />
+
+Jeśli podamy błędne hasło zostaniemy o tym poinformaowani.
+
+<img src="./readmeAssets/cipher4.gif" width=800 />
+
+**Zdjęcia także możemy szyfrować**
+
+<img src="./readmeAssets/fotoSz.gif" width=800 />
+
+## **Statystyki logowań**
+
+W zakładce settings możemy zobaczyć wszystkie skutecznie próby logowania wraz z adresami ip przypisanymi do urządzenia z którego nastąpiło zalogowanie.
+
+<img src="./readmeAssets/loggedd.png" width=600 />
