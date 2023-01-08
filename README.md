@@ -65,7 +65,7 @@ Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia 
 
 - **Wyliczanie entropii**
 
-  ````js
+  ```js
   const checkPassword = (password) => {
   let entropy = 0;
   let size = password.length;
