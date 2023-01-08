@@ -34,7 +34,7 @@ Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki mo�
 
 Aby stworzyć nowe konta musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
 
-![alt](../readmeAssets/register.png)
+![alt](./readmeAssets/register.png)
 
 Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia hasła jest mniejsza niż 3 to hasło nie zostanie przepuszczone.
 
