@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# NoteShare - bezpieczna aplikacja do tworzenia notatek
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Zawartość
 
-## Available Scripts
+  <ol>
+    <li>
+      <a href="#o-aplikacji">O aplikacji</a>
+      <ul>
+        <li><a href="#narzędzia">Narzędzia</a></li>
+      </ul>
+    </li>
+    <li><a href="#tworzenie-konta">Tworzenie konta</a></li>
+    <li><a href="#logowanie">Logowanie</a></li>
 
-In the project directory, you can run:
+  </ol>
 
-### `npm start`
+## O aplikacji
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki możemy dodatkowo udostępniać wybranym użytkownikom oraz wysyłać je do wszystkich publicznie. Ważnym elementem narzędzia jest także możliwość szyfrowania notatek przy pomocy hasła.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Narzędzia
 
-### `npm test`
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-### `npm run build`
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tworzenie konta
 
-### `npm run eject`
+Aby stworzyć nowe konta musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![alt](../readmeAssets/register.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia hasła jest mniejsza niż 3 to hasło nie zostanie przepuszczone.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Wyliczanie entropii
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+        const checkPassword = (password) => {
+        let entropy = 0;
+        let size = password.length;
 
-## Learn More
+        for (let i = 0; i < 256; i++) {
+            let prob = (password.split(String.fromCharCode(i)).length - 1) / size;
+            if (prob > 0) {
+            entropy += prob * Math.log2(prob);
+            }
+        }
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+        return -entropy;
+        };
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Dodatkowo email nie może się powtarzać. Jeżeli system napotka jakiś błąd formularz wyświetli odpowiedni komunikat.
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Logowanie
