@@ -18,7 +18,7 @@ const Register = () => {
       return setError("Empty inputs");
     }
 
-    const response = await fetch("http://localhost:4000/user", {
+    const response = await fetch("https://localhost/user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, password, email }),

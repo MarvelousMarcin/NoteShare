@@ -1,4 +1,3 @@
-import lock from "../../assets/lock.png";
 import share from "../../assets/settings.png";
 import { motion } from "framer-motion";
 

@@ -25,7 +25,7 @@ const Public = () => {
   };
 
   const getPublicNotes = async () => {
-    const response = await fetch("http://localhost:4000/notepublic", {
+    const response = await fetch("https://localhost/notepublic", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),

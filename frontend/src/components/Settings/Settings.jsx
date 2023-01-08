@@ -17,7 +17,7 @@ const Settings = () => {
   };
 
   const getStats = async () => {
-    const response = await fetch("http://localhost:4000/get_stats", {
+    const response = await fetch("https://localhost/get_stats", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
