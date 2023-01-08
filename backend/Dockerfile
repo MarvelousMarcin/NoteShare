@@ -1,15 +1,7 @@
-FROM node:16-alpine
-
-RUN npm install -g nodemon
-
+FROM node:alpine
 WORKDIR /app
-
-COPY package.json .
-
-RUN npm install
-
-COPY . .
-
-EXPOSE 4000
-
-CMD ["npm", "start"]
+COPY package.json ./
+COPY package-lock.json ./
+COPY ./ ./
+RUN npm i
+CMD ["npm", "run", "start"]

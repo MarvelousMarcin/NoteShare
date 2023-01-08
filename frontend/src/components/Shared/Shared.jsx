@@ -18,7 +18,7 @@ const Shared = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const getSharedNotes = async () => {
-    const response = await fetch("http://localhost:4000/getshared", {
+    const response = await fetch("/api/getshared", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
