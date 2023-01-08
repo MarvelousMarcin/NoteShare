@@ -30,15 +30,17 @@ Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki mo�
 
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## Tworzenie konta
+## **Tworzenie konta**
 
-Aby stworzyć nowe konta musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
+Aby stworzyć nowe konto musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
 
-![alt](./readmeAssets/register.png)
+<img src="./readmeAssets/register.png" width=800  style="display: block; margin: 0 auto"/>
+
+### Zabezpieczenia
 
 Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia hasła jest mniejsza niż 3 to hasło nie zostanie przepuszczone.
 
-### Wyliczanie entropii
+- **Wyliczanie entropii**
 
         const checkPassword = (password) => {
         let entropy = 0;
@@ -54,6 +56,26 @@ Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia 
         return -entropy;
         };
 
-Dodatkowo email nie może się powtarzać. Jeżeli system napotka jakiś błąd formularz wyświetli odpowiedni komunikat.
+- **Email musi być unikalny oraz musi być "E-Mailem"** - jeżeli system napotka jakiś błąd formularz wyświetli odpowiedni komunikat.
 
-## Logowanie
+- **Hasło jest haszowane** - przed dodaniem hasła do bazy jest ono szyfrowane przy pomocy bcrypta z solą.
+
+      const hashedPassword = bcrypt.hashSync(password, saltRounds);
+
+## **Logowanie**
+
+Aby się zaglować musimy podać email oraz hasło.
+
+<img src="./readmeAssets/login.png" width=800  style="display: block; margin: 0 auto"/>
+
+### Zabezpieczenia
+
+- **Opóźnienie w logowaniu** - system nie dopuszcza wykonywania więcej niż jednego requesta w ciągu 2 sekund. Jeżeli będziemy próbowali brute-forcować system nas powtrzyma.
+
+<img src="./readmeAssets/logintofast.png" width=500  style="display: block; margin: 0 auto"/>
+
+- **Blokada konta** - jeżeli źle wpiszemy hasło po raz 30. System uzna to jako próbę włamania i zablokuje zupełnie możliwość logowania. Jedyna opcja odblokowania to wiadomość do administracji.
+
+<img src="./readmeAssets/blocked.png" width=500  style="display: block; margin: 0 auto"/>
+
+- **Śledzenie ip logujących się osób** - po prawidłowym wejściu na konto, system wysyła do bazy informację o ip zalogowane user oraz o godzinie, kiedy zalogowanie nastąpiło.
