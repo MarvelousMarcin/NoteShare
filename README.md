@@ -35,6 +35,32 @@ Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki mo�
 
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
+## HTTPS
+
+Aplikacja używa protokołu szyfrowania TLS. Szyfrowanie umożliwa dodatkowy kontener z nginx, który to przy użyciu self-signed certyfikatami, przekierowuje szyfrowany ruch do aplikacji.
+
+Przekierowanie ruchu http na https
+
+```docker
+  server {
+     listen 80 default_server;
+     listen [::]:80 default_server;
+     server_name 127.0.0.1;
+     return 301 https://$server_name$request_uri;
+   }
+```
+
+Użycie self-signed certyfikatów
+
+```docker
+  server {
+      listen 443 ssl default_server;
+      listen [::]:443 http2 default_server;
+      ssl_certificate /etc/nginx/certs/client-cert.pem;
+      ssl_certificate_key /etc/nginx/certs/client-key.pem;
+  }
+```
+
 ### Instalacja
 
 1. Sklonuj repo
@@ -49,9 +75,9 @@ Aplikacja umożliwa tworzenie notatek, przy pomocy notacji Markdown. Notatki mo�
    ```sh
     docker compose up
    ```
-4. Stworzą się dwa image **noteshare-api** oraz **noteshare-client**
+4. Stworzą się trzy kontenery **client**, **api** oraz **nginx**
 
-5. Wejdź na linki https://localhost:3000
+5. Wejdź na linki https://localhost lub http://localhost
 
 ## **Tworzenie konta**
 
@@ -67,20 +93,19 @@ Formularz sprawdza złożoność hasła na podstawie entropii. Jeżeli entropia 
 
   ```js
   const checkPassword = (password) => {
-  let entropy = 0;
-  let size = password.length;
+    let entropy = 0;
+    let size = password.length;
 
-  for (let i = 0; i < 256; i++) {
-   let prob = (password.split(String.fromCharCode(i)).length - 1) / size;
-   if (prob > 0) {
-     entropy += prob * Math.log2(prob);
-   }
-  }
+    for (let i = 0; i < 256; i++) {
+      let prob = (password.split(String.fromCharCode(i)).length - 1) / size;
+      if (prob > 0) {
+        entropy += prob * Math.log2(prob);
+      }
+    }
 
-  return -entropy;
+    return -entropy;
   };
-   ```
-  
+  ```
 
 - **Email musi być unikalny oraz musi być "E-Mailem"** - jeżeli system napotka jakiś błąd formularz wyświetli odpowiedni komunikat.
 
