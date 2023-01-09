@@ -11,7 +11,7 @@ const Note = ({
 }) => {
   return (
     <section
-      className="flex cursor-pointer flex-row justify-between px-10 border-[#d9d3cd] border-2 rounded py-8 mb-5"
+      className="flex cursor-pointer shadow-xl flex-row justify-between px-10 border-[#d9d3cd] border-2 rounded py-8 mb-5"
       id={id}
     >
       <div onClick={onClick} id={id} className="text-3xl">

@@ -209,8 +209,8 @@ const Home = () => {
           </section>
         )}
         {shareOpen && (
-          <section className="rounded-md p-20 fixed w-[50rem] h-[80%] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <h1 className="text-2xl  mb-10">Make public</h1>
+          <section className="rounded-md p-20 fixed w-[50rem] h-[95%] bg-[#F1EDE9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <h1 className="text-2xl  mb-10 font-bold">Make public</h1>
             <FormGroup>
               {clickedNote.public === "Y" && (
                 <FormControlLabel
@@ -226,7 +226,7 @@ const Home = () => {
               )}
             </FormGroup>
             <section className="flex flex-col h-[40%] justify-around">
-              <h1 className="text-2xl ">Share to a friend</h1>
+              <h1 className="text-2xl font-bold">Share to a friend</h1>
               <input
                 onChange={(e) => setUserShare(e.target.value)}
                 type="text"
@@ -242,8 +242,8 @@ const Home = () => {
               <p>{shareError}</p>
             </section>
 
-            <section className="flex flex-col h-[20%] justify-around">
-              <h1 className="text-2xl ">
+            <section className="flex flex-col h-[30%] justify-around">
+              <h1 className="text-2xl font-bold">
                 {clickedNote.locked === "N" ? "Encrypt" : "Decrypt"}
               </h1>
 
@@ -255,7 +255,7 @@ const Home = () => {
               />
               <button
                 onClick={cipherNote}
-                className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold"
+                className="bg-[#181818] text-white w-[10rem] h-[2.5rem] font-bold mt-4"
               >
                 {clickedNote.locked === "N" ? "Encrypt" : "Decrypt"}
               </button>

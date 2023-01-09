@@ -80,7 +80,7 @@ const Public = () => {
           <div className="flex flex-row justify-between w-[30vw] mb-10">
             <h2 className="font-bold text-2xl">Public notes</h2>
           </div>
-          <article className="h-[35vh] overflow-y-scroll overflow-x-hidden whitespace-nowrap overflow-auto scrollbar-hide">
+          <article className="h-[35vh] w-[34rem] overflow-y-scroll overflow-x-hidden whitespace-nowrap overflow-auto scrollbar-hide">
             {publicNotes.map((item) => (
               <Note
                 onClick={onNoteClick}

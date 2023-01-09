@@ -36,6 +36,11 @@ userRouter.post("/user", (req, res) => {
     return res.status(400).send({ error: "Wrong email" });
   }
 
+  let format = /[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
+  if (format.test(email)) {
+    return res.status(400).send({ error: "Wrong symbols in emaill" });
+  }
+
   // Validate password
   if (checkPassword(password) < 3) {
     return res.status(400).send({ error: "Password too easy" });
