@@ -79,6 +79,11 @@ Użycie self-signed certyfikatów
 
 5. Wejdź na linki https://localhost lub http://localhost
 
+## *Testowe loginy*
+
+* Email: marcin@gmail.com Hasło: 1234
+* Email: test@gmail.com Hasło: 1234
+
 ## **Tworzenie konta**
 
 Aby stworzyć nowe konto musimy podać trzy podstawowe informacje: **imię**, **email** oraz **hasło**.
