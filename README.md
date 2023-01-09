@@ -67,7 +67,7 @@ Użycie self-signed certyfikatów
    ```sh
    git clone https://github.com/MarvelousMarcin/NoteShare
    ```
-2. Dodaj plik z .env z JWT(przykładowy token, na którym są zrobione testowe dane)
+2. Dodaj plik z .env z JWT(przykładowy token, na którym są zrobione testowe dane) do folderu backend
    ```sh
    JWT_TOKEN='dashdioasjndioasiodhnasiodshnaindai0pdhnaisda'
    ```
